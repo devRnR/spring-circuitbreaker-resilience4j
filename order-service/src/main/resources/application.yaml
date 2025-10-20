@@ -1,0 +1,51 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:order-service}
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+product:
+  service:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:8081}
+
+logging:
+  level:
+    com.orderservice.orderservice.infrastructure.client: DEBUG
+    com.orderservice.orderservice.application: DEBUG
+    feign: DEBUG
+    io.github.resilience4j: DEBUG
+    io.github.resilience4j.circuitbreaker: DEBUG
+    org.springframework.cloud.circuitbreaker: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,circuitbreakers,metrics
+  endpoint:
+    health:
+      show-details: always
+    circuitbreakers:
+      enabled: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 3000
+        permittedNumberOfCallsInHalfOpenState: 3
+        maxWaitDurationInHalfOpenState: 3000
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 1000
+    instances:
+      product-service_getProduct:
+        baseConfig: default
