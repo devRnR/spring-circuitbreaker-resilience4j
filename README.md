@@ -237,7 +237,7 @@ public class ProductService {
 
 simulateRandomFailure 메서드는 50% 확률로 장애를 발생시킨다. 이는 circuit breaker가 작동하는 테스트를 위해 추가한 것이다.
 
-## 테스트 실행
+## 예제: 장애 전파 차단 실습
 
 테스트는 order-service 에서 product-service로 20회 호출하도록 했으며, /actuator/circuitbreakers 엔드포인트를 통해 circuit breaker의 상태를 확인할 수 있다.
 
